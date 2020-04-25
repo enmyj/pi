@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yml:/traefik.yml
+      - ./letsencrypt/acme.json:/acme.json
+
+  flaskian:
+    build:
+      context: ../../flaskian/
+      dockerfile: Dockerfile
+    image: ian
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flaskian.rule=Host(`ianmyjer.com`) || Host(`www.ianmyjer.com`)" 
+      - "traefik.http.routers.tls=true"
+      # - "traefik.http.routers.flaskian.entrypoints=websecure"
+      # - "traefik.http.routers.flaskian.entrypoints=web"
+      - "traefik.http.routers.flaskian.tls.certresolver=myhttpchallenge"

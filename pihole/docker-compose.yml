@@ -1,0 +1,21 @@
+version: "3"
+
+# this is just the basic docker-compose to get pihole running
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    network_mode: "host"
+    environment:
+      TZ: 'America/New_York'
+      # WEBPASSWORD: 
+      ServerIP: 10.0.0.200
+    volumes:
+      - './etc-pihole/:/etc/pihole/'
+      - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
+      - './var-log/pihole.log:/var/log/pihole.log'
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    restart: unless-stopped
