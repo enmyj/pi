@@ -21,8 +21,6 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.flaskian.rule=Host(`ianmyjer.com`) || Host(`www.ianmyjer.com`)" 
+      - "traefik.http.routers.flaskian.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)" 
       - "traefik.http.routers.tls=true"
-      # - "traefik.http.routers.flaskian.entrypoints=websecure"
-      # - "traefik.http.routers.flaskian.entrypoints=web"
       - "traefik.http.routers.flaskian.tls.certresolver=myhttpchallenge"
