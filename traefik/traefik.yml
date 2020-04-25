@@ -10,10 +10,8 @@ entryPoints:
   websecure:
     address: ':443'
 
-# TODO: switch to secure mode
-# https://docs.traefik.io/operations/dashboard/#secure-mode
 api:
-  insecure: true
+  insecure: false
   dashboard: true
   debug: true
 
