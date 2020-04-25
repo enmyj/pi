@@ -4,11 +4,10 @@ services:
   traefik:
     container_name: traefik
     image: traefik
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.yml:/traefik.yml
@@ -25,38 +24,9 @@ services:
       context: ../../flaskian/
       dockerfile: Dockerfile
     image: ian
-    restart: always
-    ports:
-      - "8081:8000"
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.flaskian.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)" 
       - "traefik.http.routers.tls=true"
       - "traefik.http.routers.flaskian.tls.certresolver=myhttpchallenge"
-
-  pihole:
-    container_name: pihole
-    image: pihole/pihole:latest
-    dns:
-      - 127.0.0.1
-      - 1.1.1.1
-    ports:
-      - '0.0.0.0:53:53/tcp'
-      - '0.0.0.0:53:53/udp'
-      - '0.0.0.0:67:67/udp'
-      - '0.0.0.0:8082:80/tcp'
-    volumes:
-      - ./etc-pihole/:/etc/pihole/
-      - ./etc-dnsmasqd/:/etc/dnsmasq.d/
-      - ./pihole.log:/var/log/pihole.log
-    environment:
-      ServerIP: 10.0.0.200
-      VIRTUAL_HOST: pihole.ianmyjer.com
-      # WEB_PORT: 80
-      TZ: 'America/New_York'
-      # WEBPASSWORD: ''
-    restart: unless-stopped
-    labels:
-       - "traefik.enable=true"
-       - "traefik.http.routers.pihole.rule=Host(`pihole.ianmyjer.com`)"
-       - "traefik.http.routers.pihole.priority=1"
