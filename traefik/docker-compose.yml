@@ -14,9 +14,12 @@ services:
       - ./traefik.yml:/traefik.yml
       - ./letsencrypt/acme.json:/acme.json
     labels:
+      - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`traefik.ianmyjer.com`)"
       - "traefik.http.routers.api.service=api@internal"
       - "traefik.http.routers.api.middlewares=auth"
+      - "traefik.http.routers.api.tls=true"
+      - "traefik.http.routers.api.tls.certresolver=myhttpchallenge"
       - "traefik.http.middlewares.auth.basicauth.users=ian:$$apr1$$pedizur5$$tfpDsNxWXlZ2MBR2X4p5d/"
 
   flaskian:
@@ -26,8 +29,13 @@ services:
       dockerfile: Dockerfile
     image: ian
     restart: unless-stopped
+    ports: 
+      - "8081:8000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.flaskian.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)" 
-      - "traefik.http.routers.tls=true"
-      - "traefik.http.routers.flaskian.tls.certresolver=myhttpchallenge"
+      - "traefik.http.routers.ian-sec.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)" 
+      - "traefik.http.routers.ian-sec.entrypoints=websecure"
+      - "traefik.http.routers.ian-sec.tls=true"
+      - "traefik.http.routers.ian-sec.tls.certresolver=myhttpchallenge"
+      # - "traefik.http.routers.ian-norm.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)"
+      # - "traefik.http.routers.ian-norm.entrypoints=web"

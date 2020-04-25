@@ -6,14 +6,13 @@ entryPoints:
         entryPoint:
           to: websecure
           scheme: https
-  
+
   websecure:
     address: ':443'
 
 api:
   insecure: true
   dashboard: true
-  debug: true
 
 
 providers:
