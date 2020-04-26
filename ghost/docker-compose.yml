@@ -9,7 +9,7 @@ services:
     ports:
       - 2368:2368
     environment:
-            url: https://ghost.ianmyjer.com
+      url: https://ghost.ianmyjer.com
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.ghost.rule=Host(`ghost.ianmyjer.com`)" 

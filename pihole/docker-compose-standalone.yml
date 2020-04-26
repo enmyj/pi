@@ -14,7 +14,7 @@ services:
     volumes:
       - './etc-pihole/:/etc/pihole/'
       - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
-      - './var-log/pihole.log:/var/log/pihole.log'
+      - './pihole.log:/var/log/pihole.log'
     dns:
       - 127.0.0.1
       - 1.1.1.1

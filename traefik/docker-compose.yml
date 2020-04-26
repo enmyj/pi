@@ -12,6 +12,9 @@ services:
       - "80:80"
       - "443:443"
       - "8080:8080"
+      - "853:853"
+      - "53:53"
+      - "53:53/udp"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.yml:/traefik.yml
@@ -38,10 +41,14 @@ services:
       - "8081:8000"
     labels:
       - "traefik.enable=true"
+      
+      # HTTPS config (http on 80 auto-routed to port 443)
       - "traefik.http.routers.ian-sec.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)" 
-      - "traefik.http.routers.ian-sec.entrypoints=websecure"
+      # - "traefik.http.routers.ian-sec.entrypoints=websecure"
       - "traefik.http.routers.ian-sec.tls=true"
       - "traefik.http.routers.ian-sec.tls.certresolver=myhttpchallenge"
+      
+      # HTTP config (not needed)
       # - "traefik.http.routers.ian-norm.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)"
       # - "traefik.http.routers.ian-norm.entrypoints=web"
 

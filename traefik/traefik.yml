@@ -2,9 +2,8 @@ log:
   filePath: "./traefik.log"
   level: "DEBUG"
 
-metrics: {}
-tracing: {}
-
+# metrics: {}
+# tracing: {}
 
 entryPoints:
   web:
@@ -17,6 +16,12 @@ entryPoints:
 
   websecure:
     address: ':443'
+  dnsovertls:
+    address: ':853'
+  dns:
+    address: ':53'
+  udpdns:
+    address: ':53/udp'
 
 api:
   insecure: true
@@ -34,6 +39,7 @@ certificatesResolvers:
     acme:
       email: "ian@ianmyjer.com"
       storage: "acme.json"
+      # tlsChallenge: {}
       httpChallenge:
         entryPoint: web
 
