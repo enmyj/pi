@@ -27,4 +27,4 @@ This looks solid: https://demyx.sh/tutorial/how-to-run-openvpn-and-pi-hole-using
 https://beenje.github.io/blog/posts/running-your-application-over-https-with-traefik/
 https://docs.traefik.io/v1.7/user-guide/docker-and-lets-encrypt/
 https://docs.traefik.io/v2.0/https/acme/#httpchallenge
-
+https://www.reddit.com/r/pihole/comments/fy8zmu/pihole_traefik_dnsovertls/
