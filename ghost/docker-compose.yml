@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  ghost:
+    image: ghost
+    container_name: ghost
+    networks:
+      - ian
+    ports:
+      - 2368:2368
+    environment:
+            url: https://ghost.ianmyjer.com
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ghost.rule=Host(`ghost.ianmyjer.com`)" 
+      - "traefik.http.routers.ghost.tls=true"
+      - "traefik.http.routers.ghost.tls.certresolver=myhttpchallenge"
+
+networks:
+  ian:
+    external: true
+

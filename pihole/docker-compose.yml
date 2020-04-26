@@ -19,8 +19,8 @@ services:
       - ./etc-dnsmasqd/:/etc/dnsmasq.d/
     environment:
       ServerIP: 10.0.0.200
-      # VIRTUAL_HOST: pihole.ianmyjer.com
-      # WEB_PORT: 80
+      VIRTUAL_HOST: pihole.ianmyjer.com
+      WEB_PORT: 80
       TZ: 'America/New_York'
       WEBPASSWORD: ''
     restart: unless-stopped
