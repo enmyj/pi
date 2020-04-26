@@ -1,6 +1,7 @@
 traefik/letsencrypt/*
-pihole/etc-dnsmasqd/
-pihole/etc-pihole/
+pihole/etc-dnsmasqd/*
+pihole/etc-pihole/*
+pihole/etc-dnsmasq.d/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
