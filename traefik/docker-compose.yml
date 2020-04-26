@@ -5,6 +5,9 @@ services:
     container_name: traefik
     image: traefik
     restart: unless-stopped
+    networks:
+      - default
+      - ian
     ports:
       - "80:80"
       - "443:443"
@@ -28,6 +31,8 @@ services:
       context: ../../flaskian/
       dockerfile: Dockerfile
     image: ian
+    networks:
+      - ian
     restart: unless-stopped
     ports: 
       - "8081:8000"
@@ -39,3 +44,7 @@ services:
       - "traefik.http.routers.ian-sec.tls.certresolver=myhttpchallenge"
       # - "traefik.http.routers.ian-norm.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)"
       # - "traefik.http.routers.ian-norm.entrypoints=web"
+
+networks:
+  ian:
+    name: ian

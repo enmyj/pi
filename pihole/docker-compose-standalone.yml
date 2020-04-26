@@ -19,3 +19,10 @@ services:
       - 127.0.0.1
       - 1.1.1.1
     restart: unless-stopped
+    labels:
+       - "traefik.enable=true"
+       - "traefik.http.routers.pihole.rule=Host(`pihole.ianmyjer.com`)"
+       - "traefik.http.routers.pihole.priority=1"
+       - "traefik.http.routers.pihole.tls=true"
+       - "traefik.http.routers.pihole.tls.certresolver=myhttpchallenge"
+
