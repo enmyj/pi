@@ -1,3 +1,5 @@
+# stupid vscode fish thing
+https://github.com/microsoft/vscode-remote-release/issues/2509
 
 # Dynamic DNS
 Apparently my router's public IP address can change anytime so I'm using DuckDNS.org cuz it's free and hilariously simple
