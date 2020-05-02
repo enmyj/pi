@@ -6,7 +6,6 @@ services:
     image: traefik
     restart: unless-stopped
     networks:
-      - default
       - ian
     ports:
       - "80:80"
@@ -21,6 +20,8 @@ services:
       - ./letsencrypt/acme.json:/acme.json
     labels:
       - "traefik.enable=true"
+      
+      # Traefik Dashboard Secure Config
       - "traefik.http.routers.api.rule=Host(`traefik.ianmyjer.com`)"
       - "traefik.http.routers.api.service=api@internal"
       - "traefik.http.routers.api.middlewares=auth"
@@ -51,6 +52,8 @@ services:
       # HTTP config (not needed)
       # - "traefik.http.routers.ian-norm.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)"
       # - "traefik.http.routers.ian-norm.entrypoints=web"
+      # - "traefik.http.routers.ian-norm.middlewares=traefik-redirect"
+      # - "traefik.http.middlewares.traefik-redirect.redirectscheme.scheme=https" 
 
 networks:
   ian:

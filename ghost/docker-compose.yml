@@ -6,13 +6,16 @@ services:
     container_name: ghost
     networks:
       - ian
+    restart: unless-stopped
     ports:
-      - 2368:2368
-    environment:
-      url: https://ghost.ianmyjer.com
+      - 8083:2368
+    # environment:
+    #   url: https://blog.ianmyjer.com
+    volumes:
+      - ./blog/:/var/lib/ghost/content
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.ghost.rule=Host(`ghost.ianmyjer.com`)" 
+      - "traefik.http.routers.ghost.rule=Host(`blog.ianmyjer.com`)" 
       - "traefik.http.routers.ghost.tls=true"
       - "traefik.http.routers.ghost.tls.certresolver=myhttpchallenge"
 

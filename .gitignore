@@ -2,6 +2,7 @@ traefik/letsencrypt/*
 pihole/etc-dnsmasqd/*
 pihole/etc-pihole/*
 pihole/etc-dnsmasq.d/*
+ghost/blog/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
