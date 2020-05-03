@@ -9,8 +9,8 @@ services:
     restart: unless-stopped
     ports:
       - 8083:2368
-    # environment:
-    #   url: https://blog.ianmyjer.com
+    environment:
+      url: https://blog.ianmyjer.com
     volumes:
       - ./blog/:/var/lib/ghost/content
     labels:
