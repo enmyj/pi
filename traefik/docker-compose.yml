@@ -29,32 +29,6 @@ services:
       - "traefik.http.routers.api.tls.certresolver=myhttpchallenge"
       - "traefik.http.middlewares.auth.basicauth.users=ian:$$apr1$$pedizur5$$tfpDsNxWXlZ2MBR2X4p5d/"
 
-  flaskian:
-    container_name: flaskian
-    build:
-      context: ../../flaskian/
-      dockerfile: Dockerfile
-    image: ian
-    networks:
-      - ian
-    restart: unless-stopped
-    ports: 
-      - "8081:8000"
-    labels:
-      - "traefik.enable=true"
-      
-      # HTTPS config (http on 80 auto-routed to port 443)
-      - "traefik.http.routers.ian-sec.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)" 
-      # - "traefik.http.routers.ian-sec.entrypoints=websecure"
-      - "traefik.http.routers.ian-sec.tls=true"
-      - "traefik.http.routers.ian-sec.tls.certresolver=myhttpchallenge"
-      
-      # HTTP config (not needed)
-      # - "traefik.http.routers.ian-norm.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)"
-      # - "traefik.http.routers.ian-norm.entrypoints=web"
-      # - "traefik.http.routers.ian-norm.middlewares=traefik-redirect"
-      # - "traefik.http.middlewares.traefik-redirect.redirectscheme.scheme=https" 
-
 networks:
   ian:
     name: ian
