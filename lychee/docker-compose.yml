@@ -43,16 +43,16 @@ services:
 
 
   lychee:
-    image: ghcr.io/linuxserver/piwigo:latest
-    container_name: piwigo
+    image: lycheeorg/lychee:v4.2.2
+    container_name: lychee
     ports:
       - 8084:80
     networks:
       - ian
     environment:
       - TZ=UTC
-      - PUID=1000
-      - PGID=1000
+      # - PUID=1000
+      # - PGID=1000
       - STARTUP_DELAY=0
     restart: unless-stopped
     labels:
