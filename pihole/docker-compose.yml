@@ -18,11 +18,13 @@ services:
       - ./etc-pihole/:/etc/pihole/
       - ./etc-dnsmasqd/:/etc/dnsmasq.d/
       - ./pihole.log:/var/log/pihole.log
-    environment:
-      ServerIP: 10.0.0.200
-      VIRTUAL_HOST: pihole.ianmyjer.com
+    env_file:
+      - .env
+    # environment:
+      # ServerIP: 10.0.0.200
+      # VIRTUAL_HOST: pihole.ianmyjer.com
       # WEB_PORT: 80
-      TZ: 'America/New_York'
+      # TZ: 'America/New_York'
       # WEBPASSWORD: ''
     restart: unless-stopped
     labels:
