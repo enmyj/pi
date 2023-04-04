@@ -13,10 +13,10 @@ services:
       - "traefik.enable=true"
       
       # HTTPS config (http on 80 auto-routed to port 443)
-      - "traefik.http.routers.ian-sec.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)" 
+      - "traefik.http.routers.flaskian.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)" 
       # - "traefik.http.routers.ian-sec.entrypoints=websecure"
-      - "traefik.http.routers.ian-sec.tls=true"
-      - "traefik.http.routers.ian-sec.tls.certresolver=myhttpchallenge"
+      - "traefik.http.routers.flaskian.tls=true"
+      - "traefik.http.routers.flaskian.tls.certresolver=myresolver"
       
       # HTTP config (not needed)
       # - "traefik.http.routers.ian-norm.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)"

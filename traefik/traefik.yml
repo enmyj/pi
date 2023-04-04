@@ -1,10 +1,3 @@
-log:
-  filePath: "./traefik.log"
-  level: "DEBUG"
-
-# metrics: {}
-# tracing: {}
-
 entryPoints:
   web:
     address: ':80'
@@ -16,29 +9,22 @@ entryPoints:
 
   websecure:
     address: ':443'
-  dnsovertls:
-    address: ':853'
-  dns:
-    address: ':53'
-  udpdns:
-    address: ':53/udp'
 
 api:
-  insecure: true
+  # insecure: true
   dashboard: true
 
 
 providers:
   docker:
-    endpoint: "unix:///var/run/docker.sock"
-    exposedByDefault: false
-
+      exposedByDefault: false
 
 certificatesResolvers:
-  myhttpchallenge:
+  myresolver:
     acme:
-      email: "ian@ianmyjer.com"
-      storage: "acme.json"
+      email: ian@ianmyjer.com
+      storage: acme.json
       tlsChallenge: {}
       # httpChallenge:
-      #  entryPoint: web
+      #    entryPoint: web
+
