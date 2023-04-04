@@ -4,6 +4,7 @@ pihole/etc-pihole/*
 pihole/etc-dnsmasq.d/*
 ghost/blog/*
 folding/folding/*
+acme*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
