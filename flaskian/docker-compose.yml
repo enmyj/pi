@@ -7,7 +7,7 @@ services:
     networks:
       - ian
     restart: unless-stopped
-    ports: 
+    ports:
       - "8081:8000"
     labels:
       - "traefik.enable=true"
@@ -15,8 +15,8 @@ services:
       # HTTPS config (http on 80 auto-routed to port 443)
       - "traefik.http.routers.flaskian.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)"
       - "traefik.http.routers.flaskian.tls=true"
-      - "traefik.http.routers.flaskian.tls.certresolver=myresolver"
+      - "traefik.http.routers.flaskian.tls.certresolver=letsencrypt"
 
 networks:
-  ian:
+  raspberrypi:
     external: true

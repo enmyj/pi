@@ -11,20 +11,18 @@ entryPoints:
     address: ':443'
 
 api:
-  # insecure: true
   dashboard: true
 
 
 providers:
   docker:
-      exposedByDefault: false
+    exposedByDefault: false
 
 certificatesResolvers:
-  myresolver:
+  letsencrypt:
     acme:
       email: ian@ianmyjer.com
-      storage: acme.json
-      tlsChallenge: {}
-      # httpChallenge:
-      #    entryPoint: web
-
+      storage: "/certificatates/acme.json"
+      httpChallenge:
+         entryPoint: web
+      # tlsChallenge: {}
