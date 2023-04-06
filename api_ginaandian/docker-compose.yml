@@ -5,11 +5,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0'
+    image: ginaandian_api
+    command: uvicorn api:app --host 0.0.0.0 --reload
     volumes:
-      - ..:/app
-    expose:
-      - 8001
+      - ./app:/app
+    ports:
+      - 8001:8000
     environment:
       - POSTGRES_USER=postgres_user
       - POSTGRES_PASSWORD=postgres_pass
@@ -18,18 +19,13 @@ services:
       - POSTGRES_PORT=5432
     depends_on:
       - backend
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.flaskian.rule=Host(`api.ginaandian.com`)"
-      - "traefik.http.routers.flaskian.tls=true"
-      - "traefik.http.routers.flaskian.tls.certresolver=letsencrypt"
 
   backend:
     image: postgres:15-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    expose:
-      - 5432
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_USER=postgres_user
       - POSTGRES_PASSWORD=postgres_pass
@@ -37,7 +33,3 @@ services:
 
 volumes:
   postgres_data:
-
-networks:
-  raspberrypi:
-    name: raspberrypi
