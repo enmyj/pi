@@ -1,29 +1,28 @@
 version: '3.8'
 
 services:
-  web:
+  api:
     build:
-      context: .
-      dockerfile: Dockerfile.prd
-    image: ginaandian_api
-    command: uvicorn api:app --host 0.0.0.0
+      context: ..
+      dockerfile: docker/Dockerfile.prd
+    image: ginaandian_api_prd
     ports:
       - 8000:8000
     environment:
+      - POSTGRES_HOST=database
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB
-      - POSTGRES_HOST
       - POSTGRES_PORT
     depends_on:
-      - backend
+      - database
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.flaskian.rule=Host(`api.ginaandian.com`)"
       - "traefik.http.routers.flaskian.tls=true"
       - "traefik.http.routers.flaskian.tls.certresolver=letsencrypt"
 
-  backend:
+  database:
     image: postgres:15-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/

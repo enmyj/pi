@@ -1,14 +1,14 @@
 version: '3.8'
 
 services:
-  web:
+  api:
     build:
-      context: .
-      dockerfile: Dockerfile
-    image: ginaandian_api
-    command: uvicorn api:app --host 0.0.0.0 --reload
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: ginaandian_api_dev
+    command: uvicorn api.api:app --host 0.0.0.0 --reload
     volumes:
-      - ./app:/app
+      - ../app:/mnt
     ports:
       - 8001:8000
     environment:
@@ -18,9 +18,9 @@ services:
       - POSTGRES_HOST=postgres_db
       - POSTGRES_PORT=5432
     depends_on:
-      - backend
+      - database
 
-  backend:
+  database:
     image: postgres:15-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
