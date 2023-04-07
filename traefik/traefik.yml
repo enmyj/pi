@@ -22,7 +22,7 @@ certificatesResolvers:
   letsencrypt:
     acme:
       email: ian@ianmyjer.com
-      storage: "/certificatates/acme.json"
+      storage: "/letsencrypt/acme.json"
       httpChallenge:
          entryPoint: web
       # tlsChallenge: {}

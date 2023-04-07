@@ -3,18 +3,17 @@ version: '3.7'
 services:
   traefik:
     container_name: traefik
-    image: traefik
+    image: traefik:2.9.10
     restart: unless-stopped
     networks:
       - raspberrypi
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik.yml:/traefik.yml
-      - "./traefik-public-certificates:/certificates"
+      - traefik-public-certificates:/letsencrypt
     labels:
       - "traefik.enable=true"
 
