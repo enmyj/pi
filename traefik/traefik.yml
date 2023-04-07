@@ -23,6 +23,6 @@ certificatesResolvers:
     acme:
       email: ian@ianmyjer.com
       storage: "/letsencrypt/acme.json"
-      httpChallenge:
-         entryPoint: web
-      # tlsChallenge: {}
+      tlsChallenge: {}
+      # httpChallenge:
+      #    entryPoint: web
