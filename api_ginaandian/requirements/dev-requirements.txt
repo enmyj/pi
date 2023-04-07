@@ -8,10 +8,6 @@ alembic==1.10.3
     # via
     #   -c requirements.txt
     #   -r dev-requirements.in
-greenlet==2.0.2
-    # via
-    #   -c requirements.txt
-    #   sqlalchemy
 mako==1.2.4
     # via
     #   -c requirements.txt

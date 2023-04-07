@@ -1,7 +1,9 @@
 # Dockerfile
 
 # pull the official docker image
-FROM python:3.11-slim
+FROM python:3.11-slim-buster
+
+RUN apt-get update && apt-get install -y libpq-dev gcc
 
 # set work directory
 WORKDIR /mnt
