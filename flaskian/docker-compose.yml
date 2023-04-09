@@ -5,10 +5,10 @@ services:
     container_name: flaskian
     image: enmyj/flaskian:latest
     networks:
-      - ian
+      - raspberrypi
     restart: unless-stopped
     ports:
-      - "8081:8000"
+      - 8081:8000
     labels:
       - "traefik.enable=true"
 
