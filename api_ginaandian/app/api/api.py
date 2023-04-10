@@ -20,10 +20,10 @@ app.add_middleware(
 )
 
 
-@app.get("/ding")
-async def ding():
+@app.get("/miccheck")
+async def miccheck():
     """Mic Check hahaha // I be anti-myth rhythm rock shocker"""
-    return "Dong!"
+    return "hahaha"
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
