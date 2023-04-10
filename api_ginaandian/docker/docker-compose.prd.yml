@@ -42,5 +42,4 @@ volumes:
 
 networks:
   raspberrypi:
-    name: raspberrypi
     external: true
