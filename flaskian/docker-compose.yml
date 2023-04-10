@@ -16,6 +16,7 @@ services:
       - "traefik.http.routers.flaskian.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)"
       - "traefik.http.routers.flaskian.tls=true"
       - "traefik.http.routers.flaskian.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=raspberrypi"
 
 networks:
   raspberrypi:
