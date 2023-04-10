@@ -20,9 +20,9 @@ services:
       - database
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.flaskian.rule=Host(`api.ginaandian.com`)"
-      - "traefik.http.routers.flaskian.tls=true"
-      - "traefik.http.routers.flaskian.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.gandiapi.rule=Host(`api.ginaandian.com`)"
+      - "traefik.http.routers.gandiapi.tls=true"
+      - "traefik.http.routers.gandiapi.tls.certresolver=letsencrypt"
       - "traefik.docker.network=raspberrypi"
 
   database:
