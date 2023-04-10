@@ -22,7 +22,7 @@ def upgrade() -> None:
         "rsvp",
         sa.Column("name", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("plus_one_name", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-        sa.Column("RSVP", sa.Boolean(), nullable=False),
+        sa.Column("rsvp", sa.Boolean(), nullable=False),
         sa.Column("shuttle", sa.Boolean(), nullable=False),
         sa.Column("hotel_location", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
         sa.Column("driving", sa.Boolean(), nullable=True),

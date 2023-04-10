@@ -60,7 +60,7 @@ async def create_rsvp(rsvp: RSVPCreate, session: Session = Depends(get_session))
 
 @router.patch("/{id}", response_model=RSVPRead)
 async def update_rsvp(
-    *, session: Session = Depends(get_session), id: int, rsvp: RSVPUpdate
+    id: int, rsvp: RSVPUpdate, session: Session = Depends(get_session)
 ):
     db_rsvp = session.get(RSVP, id)
     if not db_rsvp:
