@@ -6,8 +6,10 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.prd
     image: ginaandian_api_prd
+    networks:
+      - raspberrypi
     ports:
-      - 8000:8000
+      - 8002:8000
     environment:
       - POSTGRES_HOST=database
       - POSTGRES_USER
@@ -26,6 +28,8 @@ services:
     image: postgres:15-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - raspberrypi
     ports:
       - 5432:5432
     environment:
@@ -39,3 +43,4 @@ volumes:
 networks:
   raspberrypi:
     name: raspberrypi
+    external: true
