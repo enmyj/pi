@@ -9,7 +9,7 @@ services:
     networks:
       - raspberrypi
     ports:
-      - 8002:8000
+      - 8002:80
     environment:
       - POSTGRES_HOST=database
       - POSTGRES_USER
