@@ -2,13 +2,16 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.rsvp import crud
+from api.rsvp import crud, guests
 
 app = FastAPI()
 app.include_router(crud.router, tags=["RSVP"])
+app.include_router(guests.router, tags=["Guests"])
 
 origins = [
     "https://ginaandian.com",
+    "http://localhost:8000"
+
 ]
 
 app.add_middleware(

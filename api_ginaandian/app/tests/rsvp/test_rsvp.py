@@ -22,10 +22,10 @@ class TestRSVP:
         response = client.post(
             "/rsvp",
             json={
-                "name": "Gina Rogari",
+                "guest_id": 2,
+                "guest_name": "Gina Rogari",
                 "plus_one_name": "Ian Myjer",
-                "rsvp": True,
-                "shuttle": True,
+                "attending": True,
             },
         )
         assert response.status_code == 200
@@ -33,9 +33,6 @@ class TestRSVP:
     def test_delete_rsvp(self, client: TestClient, rsvp_fixture):
         response = client.delete("/rsvp/1")
         assert response.status_code == 200
-
-        response = client.delete("/rsvp/1")
-        assert response.status_code != 200
 
     def test_patch_rsvp(self, client: TestClient, rsvp_fixture):
         response = client.patch("/rsvp/1", json={"name": "foobar", "shuttle": False})

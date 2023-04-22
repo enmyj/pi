@@ -2,8 +2,9 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
+from sqlalchemy.dialects.postgresql import insert
 
-from api.orm.models import RSVP, RSVPRead, RSVPCreate, RSVPName, RSVPUpdate
+from api.orm.models import RSVP, RSVPRead, RSVPCreate, RSVPUpdate, RSVPPost
 from api.db import get_session
 
 router = APIRouter(prefix="/rsvp")
@@ -19,35 +20,33 @@ async def retrieve_rsvps(
 ):
     stmt = select(RSVP).offset(offset).limit(limit)
     if name:
-        stmt = stmt.where(RSVP.name == name)
+        stmt = stmt.where(RSVP.guest_name == name)
     rsvps = session.exec(stmt).all()
     return rsvps
 
 
 @router.get("/{id}", response_model=RSVPRead)
-async def retrieve_rsvp(*, session: Session = Depends(get_session), id: int):
+async def retrieve_rsvp_by_id(*, session: Session = Depends(get_session), id: int):
     rsvp = session.get(RSVP, id)
     if not rsvp:
         raise HTTPException(status_code=404, detail="rsvp not found")
     return rsvp
 
 
-@router.get("_by_name", response_model=RSVPRead)
-async def retrieve_rsvp_by_name(
-    body: RSVPName, session: Session = Depends(get_session)
+@router.get("/guest/{guest_id}", response_model=RSVPRead)
+async def retrieve_rsvp_by_guest_id(
+    *, session: Session = Depends(get_session), guest_id: int
 ):
-    rsvp = session.execute(
-        select(RSVP).where(RSVP.name == body.name)
-    ).scalar_one_or_none()
+    rsvp = session.get(RSVP, guest_id)
     if not rsvp:
-        raise HTTPException(404, "name does not exist")
+        raise HTTPException(status_code=404, detail="rsvp not found")
     return rsvp
 
 
 @router.post("", response_model=RSVPRead)
 async def create_rsvp(rsvp: RSVPCreate, session: Session = Depends(get_session)):
     rsvp_exists = session.execute(
-        select(RSVP).where(RSVP.name == rsvp.name)
+        select(RSVP).where(RSVP.guest_name == rsvp.guest_name)
     ).scalar_one_or_none()
     if rsvp_exists:
         raise HTTPException(status_code=409, detail="RSVP for this name already exists")
@@ -72,6 +71,15 @@ async def update_rsvp(
     session.commit()
     session.refresh(db_rsvp)
     return db_rsvp
+
+# @router.post("", response_model=RSVPRead)
+# async def upsert_rsvp(body: RSVPPost, session: Session = Depends(get_session)):
+#     rsvp = session.execute(
+#         select(RSVP).where(RSVP.guest_name == body.guest_name)
+#     ).scalar_one_or_none()
+
+#     if rsvp:
+
 
 
 @router.delete("/{id}")
