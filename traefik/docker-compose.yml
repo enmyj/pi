@@ -3,30 +3,34 @@ version: '3.7'
 services:
   traefik:
     container_name: traefik
-    image: traefik
+    image: traefik:2.9
     restart: unless-stopped
     networks:
-      - ian
+      - raspberrypi
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
+      - 80:80
+      - 443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik.yml:/traefik.yml
-      - ./acme.json:/acme.json
+      - traefik-public-certificates:/letsencrypt
     labels:
       - "traefik.enable=true"
 
-      # Traefik Dashboard Secure Config
-      - "traefik.http.routers.api.rule=Host(`traefik.ianmyjer.com`)"
-      - "traefik.http.routers.api.service=api@internal"
-      - "traefik.http.routers.api.middlewares=auth"
-      - "traefik.http.routers.api.tls=true"
-      - "traefik.http.routers.api.tls.certresolver=myresolver"
-      - "traefik.http.routers.api.entrypoints=websecure"
+      # normal setup for dashboard
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.ianmyjer.com`)"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+
+      # dashboard config
       - "traefik.http.middlewares.auth.basicauth.users=ian:$$apr1$$pedizur5$$tfpDsNxWXlZ2MBR2X4p5d/"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.middlewares=auth"
+
 
 networks:
-  ian:
-    name: ian
+  raspberrypi:
+    name: raspberrypi
+
+volumes:
+  traefik-public-certificates:

@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.prd
+    image: ginaandian_api_prd
+    networks:
+      - raspberrypi
+    ports:
+      - 8002:80
+    environment:
+      - POSTGRES_HOST=database
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - POSTGRES_PORT
+    depends_on:
+      - database
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gandiapi.rule=Host(`api.ginaandian.com`)"
+      - "traefik.http.routers.gandiapi.tls=true"
+      - "traefik.http.routers.gandiapi.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=raspberrypi"
+
+  database:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - raspberrypi
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+
+volumes:
+  postgres_data:
+
+networks:
+  raspberrypi:
+    external: true

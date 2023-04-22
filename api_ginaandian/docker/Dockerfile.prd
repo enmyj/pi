@@ -1,0 +1,24 @@
+# Dockerfile
+
+# pull the official docker image
+FROM python:3.11-slim-buster
+
+RUN apt-get update && apt-get install -y libpq-dev gcc
+
+# set work directory
+WORKDIR /mnt
+
+# set env variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN pip install pip-tools
+
+# install dependencies
+COPY requirements/requirements.txt .
+RUN pip-sync requirements.txt
+
+# copy project
+COPY ./app /mnt
+
+CMD ["uvicorn", "api.api:app", "--host", "0.0.0.0", "--port", "80"]

@@ -5,18 +5,19 @@ services:
     container_name: flaskian
     image: enmyj/flaskian:latest
     networks:
-      - ian
+      - raspberrypi
     restart: unless-stopped
-    ports: 
-      - "8081:8000"
+    ports:
+      - 8081:8000
     labels:
       - "traefik.enable=true"
 
       # HTTPS config (http on 80 auto-routed to port 443)
       - "traefik.http.routers.flaskian.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)"
       - "traefik.http.routers.flaskian.tls=true"
-      - "traefik.http.routers.flaskian.tls.certresolver=myresolver"
+      - "traefik.http.routers.flaskian.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=raspberrypi"
 
 networks:
-  ian:
+  raspberrypi:
     external: true
