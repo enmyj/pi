@@ -27,6 +27,23 @@ services:
       - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.middlewares.auth.basicauth.users=ian:$$apr1$$pedizur5$$tfpDsNxWXlZ2MBR2X4p5d/"
 
+  example:
+    container_name: example
+    image: enmyj/example:latest
+    networks:
+      - ian
+    restart: unless-stopped
+    ports: 
+      - "8081:8000"
+    labels:
+      - "traefik.enable=true"
+
+      # HTTPS config (http on 80 auto-routed to port 443)
+      - "traefik.http.routers.example.rule=Host(`ianmyjer.com`, `www.ianmyjer.com`)"
+      - "traefik.http.routers.example.tls=true"
+      - "traefik.http.routers.example.tls.certresolver=myresolver"
+
+
 networks:
   ian:
     name: ian
