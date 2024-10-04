@@ -5,6 +5,7 @@ pihole/etc-dnsmasq.d/*
 ghost/blog/*
 folding/folding/*
 acme*
+*tar
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
