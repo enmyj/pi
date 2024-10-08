@@ -1,40 +1,40 @@
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: hellpot
-  namespace: default
-  labels:
-    app: hellpot
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: hellpot
+#   namespace: default
+#   labels:
+#     app: hellpot
 
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: hellpot
-  template:
-    metadata:
-      labels:
-        app: hellpot
-    spec:
-      containers:
-      - name: hellpot
-        image: hellpot:latest  # Assuming the latest tag, adjust if needed
-        imagePullPolicy: Never  # Use this for local images
-        ports:
-        - containerPort: 8080
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: hellpot
+#   template:
+#     metadata:
+#       labels:
+#         app: hellpot
+#     spec:
+#       containers:
+#       - name: hellpot
+#         image: hellpot:latest  # Assuming the latest tag, adjust if needed
+#         imagePullPolicy: Never  # Use this for local images
+#         ports:
+#         - containerPort: 8080
 
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: hellpot
-  namespace: default
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: hellpot
+#   namespace: default
 
-spec:
-  selector:
-    app: hellpot
-  ports:
-    - name: http
-      port: 80  # The port the service exposes
-      targetPort: 8080  # The port your container exposes
+# spec:
+#   selector:
+#     app: hellpot
+#   ports:
+#     - name: http
+#       port: 80  # The port the service exposes
+#       targetPort: 8080  # The port your container exposes

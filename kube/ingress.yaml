@@ -1,4 +1,4 @@
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: combined-route
@@ -8,12 +8,12 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: HostRegexp(`{host:.+}`) && PathPrefix(`/hellpot`)
-      kind: Rule
-      services:
-        - name: hellpot
-          port: 80
-    - match: HostRegexp(`{host:.+}`)
+    # - match: HostRegexp(`{host:.+}`) && PathPrefix(`/hellpot`)
+    #   kind: Rule
+    #   services:
+    #     - name: hellpot
+    #       port: 80
+    - match: HostRegexp(`{host:.+}`) && PathPrefix(`/`)
       kind: Rule
       services:
         - name: whoami
