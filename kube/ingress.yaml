@@ -8,13 +8,13 @@ spec:
   entryPoints:
     - web
   routes:
-    # - match: HostRegexp(`{host:.+}`) && PathPrefix(`/hellpot`)
-    #   kind: Rule
-    #   services:
-    #     - name: hellpot
-    #       port: 80
-    - match: HostRegexp(`{host:.+}`) && PathPrefix(`/`)
+    - match: PathPrefix(`/`)
       kind: Rule
       services:
         - name: whoami
+          port: 80
+    - match: PathPrefix(`/hellpot`) || PathPrefix(`/wp-login`)
+      kind: Rule
+      services:
+        - name: hellpot
           port: 80
