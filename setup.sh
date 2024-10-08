@@ -46,6 +46,3 @@ sudo touch /var/log/auth.log
 # backend = %(sshd_backend)s
 sudo systemctl start fail2ban
 sudo systemctl enable fail2ban
-
-
-### install k3s
