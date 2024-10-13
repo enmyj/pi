@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflared-dns
+spec:
+  selector:
+    matchLabels:
+      app: cloudflared-dns
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cloudflared-dns
+    spec:
+      containers:
+        - name: cloudflared
+          image: cloudflare/cloudflared:2024.10.1
+          args:
+            - proxy-dns
+            - --address
+            - 0.0.0.0
+            - --port
+            - "53"
+          ports:
+            - containerPort: 53
+              name: dns
+              protocol: UDP
+            - containerPort: 53
+              name: dns-tcp
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "0.25"
+              memory: "256Mi"
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudflared-dns
+spec:
+  type: ClusterIP
+  selector:
+    app: cloudflared-dns
+  ports:
+    - name: dns
+      port: 5053
+      targetPort: 53
+      protocol: UDP
+    - name: dns-tcp
+      port: 5053
+      targetPort: 53
+      protocol: TCP

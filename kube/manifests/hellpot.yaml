@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hellpot
+  namespace: default
+  labels:
+    app: hellpot
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hellpot
+  template:
+    metadata:
+      labels:
+        app: hellpot
+    spec:
+      containers:
+        - name: hellpot
+          image: hellpot:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "0.25"
+              memory: "256Mi"
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hellpot
+  namespace: default
+
+spec:
+  selector:
+    app: hellpot
+  ports:
+    - name: http
+      port: 80 # The port the service exposes
+      targetPort: 8080 # The port your container exposes

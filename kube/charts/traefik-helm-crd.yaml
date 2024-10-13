@@ -1,0 +1,31 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: traefik
+  namespace: default
+spec:
+  repo: https://helm.traefik.io/traefik
+  chart: traefik
+  version: 32.1.1
+  targetNamespace: default
+  valuesContent: |-
+    ingressRoute:
+      dashboard:
+        enabled: true
+      healthcheck:
+        enabled: true
+    ports:
+      traefik:
+        expose:
+          default: true
+      metrics:
+        port: 9100
+        expose:
+          default: true
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "50Mi"
+      limits:
+        cpu: "300m"
+        memory: "150Mi"
