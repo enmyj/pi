@@ -30,6 +30,8 @@ spec:
             - --accesslog
             - --entryPoints.web.Address=:8000
             - --entryPoints.websecure.Address=:4443
+            - --entryPoints.dns.Address=:53/udp
+            - --entryPoints.dns-dhcp.Address=:67/udp
             - --providers.kubernetescrd
             # - --certificatesresolvers.myresolver.acme.tlschallenge
             # - --certificatesresolvers.myresolver.acme.email=foo@you.com
@@ -38,6 +40,13 @@ spec:
             # Once you get things working, you should remove that whole line altogether.
             # - --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
           ports:
+          ports:
+            - name: dns
+              containerPort: 53
+              protocol: UDP
+            - name: dns-dhcp
+              containerPort: 67
+              protocol: UDP
             - name: web
               containerPort: 8000
             - name: websecure
@@ -67,3 +76,11 @@ spec:
       name: websecure
       port: 4443
       targetPort: 4443
+    - protocol: UDP
+      name: dns
+      port: 53
+      targetPort: 53
+    - protocol: UDP
+      name: dns-dhcp
+      port: 67
+      targetPort: 67
