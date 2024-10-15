@@ -21,6 +21,13 @@ spec:
           image: traefik/whoami
           ports:
             - containerPort: 80
+          resources:
+            requests:
+              cpu: "0.25"
+              memory: "256Mi"
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
 
 ---
 apiVersion: v1
@@ -33,6 +40,7 @@ spec:
   ports:
     - protocol: TCP
       name: http
-      port: 80
+      port: 8001
+      targetPort: 80
   selector:
     app: whoami

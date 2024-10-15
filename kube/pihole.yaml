@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole
+  labels:
+    app: pihole
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole
+  template:
+    metadata:
+      labels:
+        app: pihole
+    spec:
+      containers:
+        - name: pihole
+          image: pihole/pihole:latest
+          ports:
+            - containerPort: 80
+              protocol: TCP
+            - containerPort: 443
+              protocol: TCP
+            - containerPort: 53
+              protocol: TCP
+            - containerPort: 53
+              protocol: UDP
+            # - containerPort: 67
+            #   protocol: UDP
+          env:
+            - name: TZ
+              value: "America/Los_Angeles"
+            - name: WEBPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pihole-secret
+                  key: WEBPASSWORD
+          resources:
+            requests:
+              cpu: "0.25"
+              memory: "256Mi"
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
+          volumeMounts:
+            - name: pihole-data
+              mountPath: /etc/pihole
+            - name: dnsmasq-config
+              mountPath: /etc/dnsmasq.d
+      volumes:
+        - name: pihole-data
+          hostPath:
+            path: /home/imyjer/repos/pi/data/pihole
+            type: Directory
+        - name: dnsmasq-config
+          hostPath:
+            path: /home/imyjer/repos/pi/data/dnsmasq.d
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole
+spec:
+  type: LoadBalancer
+  selector:
+    app: pihole
+  ports:
+    - protocol: TCP
+      name: dns-tcp
+      port: 53
+      targetPort: 53
+    - protocol: UDP
+      name: dns-udp
+      port: 53
+      targetPort: 53
+    # - protocol: UDP
+    #   name: dns-dhcp
+    #   port: 67
+    #   targetPort: 67
+    - protocol: TCP
+      name: http
+      port: 9000
+      targetPort: 80

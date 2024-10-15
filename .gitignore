@@ -6,6 +6,7 @@ ghost/blog/*
 folding/folding/*
 acme*
 *tar
+data/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
