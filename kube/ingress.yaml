@@ -9,11 +9,11 @@ spec:
   entryPoints:
     - web
   routes:
-    # - match: PathPrefix(`/hellpot`) || PathPrefix(`/wp-login`)
-    #   kind: Rule
-    #   services:
-    #     - name: hellpot
-    #       port: 80
+    - match: PathPrefix(`/hellpot`) || PathPrefix(`/wp-login.php`) || PathPrefix(`/.git`) || PathPrefix(`/.env`)
+      kind: Rule
+      services:
+        - name: hellpot
+          port: 80
     - match: PathPrefix(`/`)
       kind: Rule
       services:
