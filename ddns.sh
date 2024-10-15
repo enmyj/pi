@@ -1,8 +1,8 @@
 #!/bin/bash
 
+set -eoux pipefail
+
 # Variables
-ZONE_ID=""
-TOKEN=""
 EMAIL="imyjer@gmail.com"
 
 # List of subdomains to update
