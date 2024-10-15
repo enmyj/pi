@@ -20,14 +20,15 @@ spec:
           image: pihole/pihole:latest
           ports:
             - containerPort: 80
+              protocol: TCP
+            - containerPort: 443
+              protocol: TCP
             - containerPort: 53
               protocol: TCP
             - containerPort: 53
               protocol: UDP
             - containerPort: 67
               protocol: UDP
-            - containerPort: 443
-              protocol: TCP
           env:
             - name: TZ
               value: "America/Los_Angeles"
@@ -36,24 +37,23 @@ spec:
                 secretKeyRef:
                   name: pihole-secret
                   key: WEBPASSWORD
+          resources:
+            requests:
+              cpu: "0.25" # Reserve 0.25 CPU for Pi-hole
+              memory: "256Mi" # Reserve 256Mi of memory
+            limits:
+              cpu: "0.5" # Limit the container to 0.5 CPU
+              memory: "512Mi" # Limit the container to 512Mi of memory
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: pihole
 spec:
-  kind: LoadBalancer
+  type: LoadBalancer
   selector:
     app: pihole
   ports:
-    - protocol: TCP
-      name: http
-      port: 80
-      targetPort: 80
-    - protocol: TCP
-      name: https
-      port: 443
-      targetPort: 443
     - protocol: TCP
       name: dns-tcp
       port: 53
@@ -66,3 +66,7 @@ spec:
       name: dns-dhcp
       port: 67
       targetPort: 67
+    - protocol: TCP
+      name: http
+      port: 9000
+      targetPort: 80
