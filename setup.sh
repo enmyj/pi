@@ -47,5 +47,5 @@ sudo touch /var/log/auth.log
 sudo systemctl start fail2ban
 sudo systemctl enable fail2ban
 
-
-### install k3s
+# install cloudflared
+https://pimylifeup.com/raspberry-pi-cloudflare-tunnel/

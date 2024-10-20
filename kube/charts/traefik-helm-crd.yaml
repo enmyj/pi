@@ -1,0 +1,14 @@
+# apiVersion: helm.cattle.io/v1
+# kind: HelmChart
+# metadata:
+#   name: traefik
+#   namespace: kube-system
+# spec:
+#   chart: traefik/traefik
+#   version: 10.24.0
+#   targetNamespace: kube-system
+#   set:
+#     service:
+#       type: LoadBalancer
+#     deployment:
+#       replicas: 1
