@@ -1,14 +1,20 @@
-# apiVersion: helm.cattle.io/v1
-# kind: HelmChart
-# metadata:
-#   name: traefik
-#   namespace: kube-system
-# spec:
-#   chart: traefik/traefik
-#   version: 10.24.0
-#   targetNamespace: kube-system
-#   set:
-#     service:
-#       type: LoadBalancer
-#     deployment:
-#       replicas: 1
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: traefik
+  namespace: default
+spec:
+  repo: https://helm.traefik.io/traefik
+  chart: traefik
+  version: 32.1.1
+  targetNamespace: default
+  valuesContent: |-
+    dashboard:
+      enabled: true
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "50Mi"
+      limits:
+        cpu: "300m"
+        memory: "150Mi"
