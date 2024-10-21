@@ -20,12 +20,22 @@ kubectl create secret generic tunnel-credentials \
     --from-file=credentials.json=/path/to-credentials-file.json
 cloudflared tunnel route dns raspberrypi dev.ianmyjer.com
 
+
+# install metallb
+# also enable "promiscious" mode on wifi interface
+# https://metallb.universe.tf/troubleshooting/#using-wifi-and-cant-reach-the-service
+helm repo add metallb https://metallb.github.io/metallb
+helm install metallb metallb/metallb -n metallb-system --create-namespace
+kubectl apply -f metal.yaml
+
+
 ## install traefik with helm
 # https://github.com/traefik/traefik-helm-chart/tree/master?tab=readme-ov-file
 # might be nice to use this instead:
 # https://docs.k3s.io/helm#using-the-helm-controller
 helm repo add traefik https://traefik.github.io/charts
 helm install traefik traefik/traefik
+
 
 # If not installed via helm, need to install Traefik CRDs
 # https://doc.traefik.io/traefik/user-guides/crd-acme/#ingressroute-definition
