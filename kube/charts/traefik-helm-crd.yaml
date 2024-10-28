@@ -12,8 +12,14 @@ spec:
     ingressRoute:
       dashboard:
         enabled: true
+      healthcheck:
+        enabled: true
     ports:
       traefik:
+        expose:
+          default: true
+      metrics:
+        port: 9100
         expose:
           default: true
     resources:
