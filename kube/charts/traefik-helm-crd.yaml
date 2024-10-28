@@ -12,6 +12,10 @@ spec:
     ingressRoute:
       dashboard:
         enabled: true
+    ports:
+      traefik:
+        expose:
+          default: true
     resources:
       requests:
         cpu: "100m"
