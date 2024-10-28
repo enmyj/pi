@@ -23,6 +23,11 @@ admin:
   existingSecret: "pihole-admin-secret"
   passwordKey: "password"
 
+extraEnvVars:
+  TZ: America/Los_Angeles
+  FTLCONF_BLOCK_ICLOUD_PR: false
+  # FTLCONF_LOCAL_IPV4:
+
 ## doesn't appear to be used
 DNS1: "1.1.1.1"
 DNS2: "1.0.0.1"
@@ -74,13 +79,3 @@ customVolumeMounts:
   - name: custom-pihole
     mountPath: /etc/pihole/pihole-FTL.conf
     subPath: pihole-FTL.conf
-
----
-# pihole-config.yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: pihole-config
-data:
-  pihole-FTL.conf: |
-    BLOCK_ICLOUD_PR=false
