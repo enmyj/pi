@@ -9,8 +9,6 @@ spec:
   version: 32.1.1
   targetNamespace: default
   valuesContent: |-
-    dashboard:
-      enabled: true
     resources:
       requests:
         cpu: "100m"
