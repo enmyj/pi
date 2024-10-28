@@ -33,12 +33,10 @@ kubectl apply -f metal.yaml
 # https://github.com/traefik/traefik-helm-chart/tree/master?tab=readme-ov-file
 # might be nice to use this instead:
 # https://docs.k3s.io/helm#using-the-helm-controller
-helm repo add traefik https://traefik.github.io/charts
-helm install traefik traefik/traefik
-
-
 # If not installed via helm, need to install Traefik CRDs
 # https://doc.traefik.io/traefik/user-guides/crd-acme/#ingressroute-definition
+helm repo add traefik https://traefik.github.io/charts
+helm install traefik traefik/traefik
 
 
 ## hellpot
@@ -46,3 +44,10 @@ docker build XXX
 docker save -o hellpot-latest.tar hellpot:latest
 sudo k3s ctr images import hellpot-latest.tar
 sudo k3s ctr images ls | grep hellpot
+
+
+## Pihole
+helm repo add mojo2600 https://mojo2600.github.io/pihole-kubernetes/
+helm repo update
+kubectl create secret generic pihole-admin-secret --from-literal=password='your_password_here'
+helm install pihole-2.26.1 mojo2600/pihole -f kube/charts/pihole-values.yaml
