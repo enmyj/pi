@@ -2,7 +2,6 @@
 serviceDns:
   type: LoadBalancer
   mixedService: true
-  # loadBalancerIP: "192.168.0.69"
   annotations:
     metallb.universe.tf/loadBalancerIPs: 192.168.0.69
     metallb.universe.tf/address-pool: pihole-pool
@@ -10,7 +9,6 @@ serviceDns:
 
 serviceWeb:
   type: LoadBalancer
-  # loadBalancerIP: "192.168.0.68"
   annotations:
     metallb.universe.tf/loadBalancerIPs: 192.168.0.69
     metallb.universe.tf/address-pool: pihole-pool
