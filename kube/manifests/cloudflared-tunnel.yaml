@@ -2,16 +2,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloudflared
+  name: cloudflared-tunnel
 spec:
   selector:
     matchLabels:
-      app: cloudflared
+      app: cloudflared-tunnel
   replicas: 1
   template:
     metadata:
       labels:
-        app: cloudflared
+        app: cloudflared-tunnel
     spec:
       containers:
         - name: cloudflared
