@@ -1,0 +1,83 @@
+---
+serviceDns:
+  type: LoadBalancer
+  mixedService: true
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 192.168.0.69
+    metallb.universe.tf/address-pool: pihole-pool
+    metallb.universe.tf/allow-shared-ip: pihole-svc
+
+serviceWeb:
+  type: LoadBalancer
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 192.168.0.69
+    metallb.universe.tf/address-pool: pihole-pool
+    metallb.universe.tf/allow-shared-ip: pihole-svc
+
+serviceDhcp:
+  enabled: false
+
+persistentVolumeClaim:
+  enabled: true
+
+admin:
+  enabled: true
+  existingSecret: "pihole-admin-secret"
+  passwordKey: "password"
+
+extraEnvVars:
+  TZ: America/Los_Angeles
+  FTLCONF_BLOCK_ICLOUD_PR: false
+  # FTLCONF_LOCAL_IPV4:
+
+## doesn't appear to be used
+DNS1: "1.1.1.1"
+DNS2: "1.0.0.1"
+
+## turned out not to be necessary
+# DNS1: "127.0.0.1#5053"
+# DNS2: "127.0.0.1#5053"
+
+### unclear what this does
+podDnsConfig:
+  enabled: true
+  policy: "None"
+  nameservers:
+    - 127.0.0.1
+    - 1.1.1.1
+
+doh:
+  enabled: true
+  envVars:
+    TUNNEL_DNS_UPSTREAM: "https://1.1.1.1/dns-query,https://1.0.0.1/dns-query"
+
+## turned out not to be necessary
+# extraContainers:
+#   - name: cloudflared
+#     image: cloudflare/cloudflared:latest
+#     args:
+#       [
+#         "proxy-dns",
+#         "--port",
+#         "5053",
+#         "--upstream",
+#         "https://1.1.1.1/dns-query",
+#         "--upstream",
+#         "https://1.0.0.1/dns-query",
+#       ]
+#     ports:
+#       - containerPort: 5053
+#         protocol: UDP
+#       - containerPort: 5053
+#         protocol: TCP
+
+# Pi-hole configuration
+customVolumes:
+  - name: custom-pihole
+    configMap:
+      name: pihole-config
+
+customVolumeMounts:
+  - name: custom-pihole
+    mountPath: /etc/pihole/pihole-FTL.conf
+    subPath: pihole-FTL.conf
