@@ -43,14 +43,15 @@ metadata:
   name: cloudflared-dns
 spec:
   type: ClusterIP
+  clusterIP: 10.43.106.32
   selector:
     app: cloudflared-dns
   ports:
     - name: dns
-      port: 5053
+      port: 53
       targetPort: 53
       protocol: UDP
     - name: dns-tcp
-      port: 5053
+      port: 53
       targetPort: 53
       protocol: TCP
