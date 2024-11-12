@@ -101,6 +101,7 @@ metadata:
     metallb.universe.tf/address-pool: pihole-pool
 spec:
   type: LoadBalancer
+  externalTrafficPolicy: Local
   selector:
     app: pihole
   ports:

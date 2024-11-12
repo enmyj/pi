@@ -66,6 +66,7 @@ metadata:
     metallb.universe.tf/address-pool: blocky-pool
 spec:
   type: LoadBalancer
+  externalTrafficPolicy: Local
   selector:
     app: blocky
   ports:

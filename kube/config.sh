@@ -27,6 +27,8 @@ cloudflared tunnel route dns raspberrypi dev.ianmyjer.com
 helm repo add metallb https://metallb.github.io/metallb
 helm install metallb metallb/metallb -n metallb-system --create-namespace
 kubectl apply -f metal.yaml
+# also need to do this when pi is on wifi
+sudo ifconfig wlan0 promisc
 
 
 ## install traefik with helm
