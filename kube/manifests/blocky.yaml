@@ -109,6 +109,8 @@ data:
         default:
           - https://1.1.1.1/dns-query
           - 1.1.1.1
+          - 9.9.9.9
+          - 10.43.106.32
     blocking:
       denylists:
         ads:

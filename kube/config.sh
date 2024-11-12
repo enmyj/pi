@@ -28,6 +28,7 @@ helm repo add metallb https://metallb.github.io/metallb
 helm install metallb metallb/metallb -n metallb-system --create-namespace
 kubectl apply -f metal.yaml
 # also need to do this when pi is on wifi
+# https://metallb.universe.tf/troubleshooting/
 sudo ifconfig wlan0 promisc
 
 
