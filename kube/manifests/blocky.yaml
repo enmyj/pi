@@ -1,0 +1,125 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blocky
+  namespace: default
+  labels:
+    app: blocky
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blocky
+  template:
+    metadata:
+      labels:
+        app: blocky
+    spec:
+      hostname: blocky-hostname
+      containers:
+        - name: blocky
+          image: spx01/blocky:latest
+          ports:
+            - containerPort: 53
+              protocol: TCP
+            - containerPort: 53
+              protocol: UDP
+            - containerPort: 853
+              protocol: TCP
+            - containerPort: 4000
+              protocol: TCP
+          env:
+            - name: TZ
+              value: "America/Los_Angeles"
+          resources:
+            requests:
+              cpu: "0.25"
+              memory: "256Mi"
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: config
+              mountPath: /app/config.yml
+              subPath: config.yml
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+            type: File
+        - name: config
+          configMap:
+            name: blocky-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blocky
+  namespace: default
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 192.168.0.68
+    metallb.universe.tf/address-pool: blocky-pool
+spec:
+  type: LoadBalancer
+  selector:
+    app: blocky
+  ports:
+    - name: dns-tcp
+      protocol: TCP
+      port: 53
+      targetPort: 53
+    - name: dns-udp
+      protocol: UDP
+      port: 53
+      targetPort: 53
+    - name: dot
+      protocol: TCP
+      port: 853
+      targetPort: 853
+    - name: http
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blocky-config
+  namespace: default
+data:
+  config.yml: |
+    minTlsServeVersion: 1.1
+    connectIPVersion: v4
+    ports:
+      dns: 53
+      tls: 853
+      https: 443
+      http: 4000
+    prometheus:
+      enable: true
+      path: /metrics
+    upstreams:
+      groups:
+        default:
+          - https://1.1.1.1/dns-query
+          - 1.1.1.1
+    blocking:
+      denylists:
+        ads:
+          - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+          - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+          - http://sysctl.org/cameleon/hosts
+          - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
+      allowlists:
+        ads:
+          - |
+            mask.icloud.com
+            mask-h2.icloud.com 
+      clientGroupsBlock:
+        default:
+          - ads

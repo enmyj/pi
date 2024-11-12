@@ -17,6 +17,15 @@ spec:
     - 192.168.0.69-192.168.0.69
 ---
 apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: blocky-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 192.168.0.68-192.168.0.68
+---
+apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
   name: home
