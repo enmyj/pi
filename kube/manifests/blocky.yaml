@@ -63,6 +63,8 @@ kind: Service
 metadata:
   name: blocky
   namespace: default
+  labels:
+    app: blocky
   annotations:
     metallb.universe.tf/loadBalancerIPs: 192.168.0.68
     metallb.universe.tf/address-pool: blocky-pool
@@ -132,3 +134,19 @@ data:
       clientGroupsBlock:
         default:
           - ads
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: blocky-service-monitor
+  namespace: monitoring
+  labels:
+    release: prometheus # Ensure this matches the label used by your Prometheus deployment
+spec:
+  selector:
+    matchLabels:
+      app: blocky # This should match the label in your Blocky service
+  endpoints:
+    - port: http # The port name defined in the Blocky service
+      path: /metrics
+      interval: 15s

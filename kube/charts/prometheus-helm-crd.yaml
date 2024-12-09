@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  chart: kube-prometheus-stack
+  repo: https://prometheus-community.github.io/helm-charts
+  targetNamespace: monitoring
+  version: 66.3.1
+  valuesContent: |-
+    prometheus:
+      prometheusSpec:
+        serviceMonitorSelector: {}
+        serviceMonitorNamespaceSelector: {}
+        podMonitorSelector: {}
+        podMonitorNamespaceSelector: {}
+      service:
+        type: LoadBalancer
+        annotations:
+          metallb.universe.tf/address-pool: home-pool
+
+    grafana:
+      adminUser: admin
+      adminPassword: prom-operator
+      service:
+        type: LoadBalancer
+        annotations:
+          metallb.universe.tf/address-pool: home-pool

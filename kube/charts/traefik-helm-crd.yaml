@@ -3,10 +3,12 @@ kind: HelmChart
 metadata:
   name: traefik
   namespace: default
+  labels:
+    app: traefik
 spec:
   repo: https://helm.traefik.io/traefik
   chart: traefik
-  version: 32.1.1
+  version: 33.0.0
   targetNamespace: default
   valuesContent: |-
     ingressRoute:
@@ -22,6 +24,15 @@ spec:
         port: 9100
         expose:
           default: true
+
+    metrics:
+      prometheus:
+        entryPoint: metrics
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          namespace: monitoring
+
     resources:
       requests:
         cpu: "100m"
