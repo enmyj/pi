@@ -113,12 +113,9 @@ data:
     upstreams:
       groups:
         default:
-          - https://base.dns.mullvad.net/dns-query
-          - 194.242.2.4
+          - https://adblock.dns.mullvad.net/dns-query
           - https://1.1.1.1/dns-query
-          - 1.1.1.1
           - https://dns.quad9.net/dns-query
-          - 9.9.9.9
           - 10.43.106.32
     blocking:
       denylists:
