@@ -51,7 +51,8 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: traefik
+      app.kubernetes.io/instance: traefik-default
+      app.kubernetes.io/name: traefik
   endpoints:
     - port: metrics
       path: /metrics
