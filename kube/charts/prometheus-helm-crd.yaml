@@ -21,6 +21,8 @@ spec:
         serviceMonitorNamespaceSelector: {}
         podMonitorSelector: {}
         podMonitorNamespaceSelector: {}
+        scrapeConfigNamespaceSelector: {}
+        scrapeConfigSelector: {}
       service:
         type: LoadBalancer
         annotations:
