@@ -139,7 +139,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: blocky-service-monitor
-  namespace: monitoring
+  namespace: default
   labels:
     release: prometheus # Ensure this matches the label used by your Prometheus deployment
 spec:

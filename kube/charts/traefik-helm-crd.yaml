@@ -29,9 +29,11 @@ spec:
       prometheus:
         entryPoint: metrics
         enabled: true
-        # serviceMonitor:
-        #   enabled: true
-        #   namespace: monitoring
+        serviceMonitor:
+          enabled: true
+          namespace: default
+          additionalLabels:
+            release: prometheus
 
     resources:
       requests:
@@ -40,20 +42,3 @@ spec:
       limits:
         cpu: "300m"
         memory: "150Mi"
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: traefik-service-monitor
-  namespace: monitoring
-  labels:
-    release: prometheus
-spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/instance: traefik-default
-      app.kubernetes.io/name: traefik
-  endpoints:
-    - port: metrics
-      path: /metrics
-      interval: 15s
