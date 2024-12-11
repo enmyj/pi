@@ -21,6 +21,8 @@ spec:
           image: traefik/whoami
           ports:
             - containerPort: 80
+            - containerPort: 443
+              protocol: TCP
           resources:
             requests:
               cpu: "0.25"
@@ -42,5 +44,9 @@ spec:
       name: http
       port: 8001
       targetPort: 80
+    - protocol: TCP
+      name: https
+      port: 443
+      targetPort: 443
   selector:
     app: whoami

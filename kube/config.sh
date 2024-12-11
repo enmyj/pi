@@ -54,3 +54,7 @@ helm repo add mojo2600 https://mojo2600.github.io/pihole-kubernetes/
 helm repo update
 kubectl create secret generic pihole-admin-secret --from-literal=password='your_password_here'
 helm install pihole-2.26.1 mojo2600/pihole -f kube/charts/pihole-values.yaml
+
+
+## Tailscale
+# https://tailscale.com/kb/1236/kubernetes-operator
