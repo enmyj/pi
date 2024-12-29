@@ -9,6 +9,11 @@ spec:
   entryPoints:
     - web
   routes:
+    - match: Host(`ianmyjer.com`)
+      kind: Rule
+      services:
+        - name: ianmyjerdotcom
+          port: 80
     - match: PathPrefix(`/hellpot`) || PathPrefix(`/wp-login.php`) || PathPrefix(`/.git`) || PathPrefix(`/.env`)
       kind: Rule
       services:

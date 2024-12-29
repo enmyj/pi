@@ -1,0 +1,53 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ianmyjerdotcom
+  namespace: default
+  labels:
+    app: ianmyjerdotcom
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ianmyjerdotcom
+  template:
+    metadata:
+      labels:
+        app: ianmyjerdotcom
+    spec:
+      containers:
+        - name: ianmyjerdotcom
+          image: enmyj/ianmyjerdotcom:latest
+          ports:
+            - containerPort: 80
+              protocol: TCP
+            - containerPort: 443
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "0.25"
+              memory: "256Mi"
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ianmyjerdotcom
+  namespace: default
+
+spec:
+  ports:
+    - protocol: TCP
+      name: http
+      port: 80
+      targetPort: 80
+    - protocol: TCP
+      name: https
+      port: 443
+      targetPort: 443
+  selector:
+    app: ianmyjerdotcom
