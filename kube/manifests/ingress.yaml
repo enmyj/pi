@@ -9,7 +9,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`ianmyjer.com`)
+    - match: Host(`ianmyjer.com`) || Host(`www.ianmyjer.com`)
       kind: Rule
       services:
         - name: ianmyjerdotcom
