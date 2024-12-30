@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: ianmyjerdotcom
-          image: ianmyjerdotcom:armv7
+          image: enmyj/ianmyjerdotcom:latest
           ports:
             - containerPort: 80
               protocol: TCP
