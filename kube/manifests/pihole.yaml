@@ -31,7 +31,7 @@ spec:
               protocol: UDP
           env:
             - name: PIHOLE_DNS_
-              value: "127.0.0.1#5053;10.43.106.32#53"
+              value: "127.0.0.1#5053"
             - name: TZ
               value: "America/Los_Angeles"
             - name: DNSMASQ_LISTENING
