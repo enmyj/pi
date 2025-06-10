@@ -1,11 +1,6 @@
 # stupid vscode fish thing
 https://github.com/microsoft/vscode-remote-release/issues/2509
 
-# Dynamic DNS
-Apparently my router's public IP address can change anytime so I'm using DuckDNS.org cuz it's free and hilariously simple
-Google also offers dynamic DNS it turns out lol
-
-How to resolve dynamic DNS from with home: https://raspberrypi.stackexchange.com/questions/13757/problems-with-dynamic-dns-and-raspberry-pi
 
 # Static IP (aka internal IP address)
 I was able to set this on my router directly. Otherwise these instructions seem solid even though they didn't work for me: https://pimylifeup.com/raspberry-pi-static-ip-address/
