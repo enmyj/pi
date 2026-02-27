@@ -1,4 +1,17 @@
 ---
+# Strip Sec-WebSocket-Extensions so mist doesn't negotiate permessage-deflate
+# (mist advertises the extension but doesn't implement decompression)
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-ws-extensions
+  namespace: default
+spec:
+  headers:
+    customRequestHeaders:
+      Sec-WebSocket-Extensions: ""
+
+---
 # HTTP IngressRoute
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
@@ -21,6 +34,8 @@ spec:
           port: 80
     - match: Host(`ian.ianmyjer.com`)
       kind: Rule
+      middlewares:
+        - name: strip-ws-extensions
       services:
         - name: chatian
           port: 80
