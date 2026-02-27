@@ -19,6 +19,11 @@ spec:
       services:
         - name: hellpot
           port: 80
+    - match: Host(`ian.ianmyjer.com`)
+      kind: Rule
+      services:
+        - name: chatian
+          port: 80
     - match: PathPrefix(`/`)
       kind: Rule
       services:

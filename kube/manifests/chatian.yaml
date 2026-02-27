@@ -1,0 +1,53 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: chatian
+  namespace: default
+  labels:
+    app: chatian
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatian
+  template:
+    metadata:
+      labels:
+        app: chatian
+    spec:
+      containers:
+        - name: chatian
+          image: enmyj/chatian:latest
+          ports:
+            - containerPort: 4000
+              protocol: TCP
+          env:
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: chatian-secret
+                  key: admin-password
+          resources:
+            requests:
+              cpu: "0.25"
+              memory: "256Mi"
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatian
+  namespace: default
+
+spec:
+  ports:
+    - protocol: TCP
+      name: http
+      port: 80
+      targetPort: 4000
+  selector:
+    app: chatian
