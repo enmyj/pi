@@ -27,11 +27,6 @@ spec:
       services:
         - name: ianmyjerdotcom
           port: 80
-    - match: PathRegexp(`^/(\.env|\.git|\.aws|\.ssh|wp-login\.php|wp-admin|xmlrpc\.php|phpmyadmin|pma|admin|administrator|config\.php|backup\.sql|dump\.sql|actuator|debug|trace|server-status|jenkins|cgi-bin|shell|eval-stdin\.php)`)
-      kind: Rule
-      services:
-        - name: hellpot
-          port: 80
     - match: Host(`ian.ianmyjer.com`)
       kind: Rule
       middlewares:
