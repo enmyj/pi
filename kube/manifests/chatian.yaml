@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
         - name: chatian
-          image: enmyj/chatian:latest
+          image: chatian:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 4000
               protocol: TCP
