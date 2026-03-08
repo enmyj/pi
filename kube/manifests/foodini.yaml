@@ -1,0 +1,72 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: foodini
+  namespace: default
+  labels:
+    app: foodini
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: foodini
+  template:
+    metadata:
+      labels:
+        app: foodini
+    spec:
+      containers:
+        - name: foodini
+          image: foodini:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: GOOGLE_CLIENT_ID
+              value: 290148003949-8jq7rtgo0edp71ih22q81arb3lvtgdbv.apps.googleusercontent.com
+            - name: REDIRECT_URL
+              value: https://food.ianmyjer.com/auth/callback
+            - name: COOKIE_SECURE
+              value: true
+            - name: PORT
+              value: 8080
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: foodini-secret
+                  key: google-client-secret
+            - name: COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: foodini-secret
+                  key: cookie-secret
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: foodini-secret
+                  key: gemini-api-key
+          resources:
+            requests:
+              cpu: "0.50"
+              memory: "512Mi"
+            limits:
+              cpu: "1.0"
+              memory: "1024Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: foodini
+  namespace: default
+
+spec:
+  ports:
+    - protocol: TCP
+      name: http
+      port: 80
+      targetPort: 8080
+  selector:
+    app: foodini
