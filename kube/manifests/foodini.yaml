@@ -29,9 +29,11 @@ spec:
             - name: REDIRECT_URL
               value: https://food.ianmyjer.com/auth/callback
             - name: COOKIE_SECURE
-              value: true
+              value: "true"
             - name: PORT
-              value: 8080
+              value: "8080"
+            - name: TZ
+              value: "America/Los_Angeles"
             - name: GOOGLE_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
