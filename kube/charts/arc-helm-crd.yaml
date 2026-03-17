@@ -1,0 +1,84 @@
+# Actions Runner Controller (ARC) - controller
+# Manages the lifecycle of runner scale sets cluster-wide
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: arc
+  namespace: kube-system
+spec:
+  repo: oci://ghcr.io/actions/actions-runner-controller-charts
+  chart: gha-runner-scale-set-controller
+  targetNamespace: arc-systems
+  createNamespace: true
+  valuesContent: |-
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "500m"
+        memory: "256Mi"
+
+---
+# Prerequisite: create the GitHub token secret first:
+#   kubectl create secret generic arc-github-secret \
+#     --namespace arc-runners \
+#     --from-literal=github_token='YOUR_GITHUB_PAT'
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: arc-runner-set-interface
+  namespace: kube-system
+spec:
+  repo: oci://ghcr.io/actions/actions-runner-controller-charts
+  chart: gha-runner-scale-set
+  targetNamespace: arc-runners
+  createNamespace: true
+  valuesContent: |-
+    githubConfigUrl: "https://github.com/withluminary/interface"
+    githubConfigSecret: arc-github-secret
+    minRunners: 0
+    maxRunners: 1
+    runnerScaleSetName: "ianpi-interface"
+    template:
+      spec:
+        containers:
+          - name: runner
+            image: ghcr.io/actions/actions-runner:latest
+            resources:
+              requests:
+                cpu: "1"
+                memory: "2048Mi"
+              limits:
+                cpu: "1"
+                memory: "2048Mi"
+
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: arc-runner-set-platform
+  namespace: kube-system
+spec:
+  repo: oci://ghcr.io/actions/actions-runner-controller-charts
+  chart: gha-runner-scale-set
+  targetNamespace: arc-runners
+  createNamespace: true
+  valuesContent: |-
+    githubConfigUrl: "https://github.com/withluminary/platform"
+    githubConfigSecret: arc-github-secret
+    minRunners: 0
+    maxRunners: 1
+    runnerScaleSetName: "ianpi-platform"
+    template:
+      spec:
+        containers:
+          - name: runner
+            image: ghcr.io/actions/actions-runner:latest
+            resources:
+              requests:
+                cpu: "1"
+                memory: "2048Mi"
+              limits:
+                cpu: "1"
+                memory: "2048Mi"
