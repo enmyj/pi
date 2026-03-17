@@ -19,54 +19,27 @@ spec:
         memory: "256Mi"
 
 ---
-# Prerequisite: create the GitHub token secret first:
+# Prerequisite: create the GitHub App secret first:
 #   kubectl create secret generic arc-github-secret \
 #     --namespace arc-runners \
-#     --from-literal=github_token='YOUR_GITHUB_PAT'
+#     --from-literal=github_app_id='APP_ID' \
+#     --from-literal=github_app_installation_id='INSTALLATION_ID' \
+#     --from-literal=github_app_private_key="$(cat /path/to/private-key.pem)"
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
-  name: arc-runner-set-interface
+  name: arc-runner-set-devboxes
   namespace: kube-system
 spec:
   chart: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
   targetNamespace: arc-runners
   createNamespace: true
   valuesContent: |-
-    githubConfigUrl: "https://github.com/withluminary/interface"
+    githubConfigUrl: "https://github.com/withluminary/devboxes"
     githubConfigSecret: arc-github-secret
     minRunners: 0
     maxRunners: 1
-    runnerScaleSetName: "ianpi-interface"
-    template:
-      spec:
-        containers:
-          - name: runner
-            image: ghcr.io/actions/actions-runner:latest
-            resources:
-              requests:
-                cpu: "1"
-                memory: "2048Mi"
-              limits:
-                cpu: "1"
-                memory: "2048Mi"
-
----
-apiVersion: helm.cattle.io/v1
-kind: HelmChart
-metadata:
-  name: arc-runner-set-platform
-  namespace: kube-system
-spec:
-  chart: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
-  targetNamespace: arc-runners
-  createNamespace: true
-  valuesContent: |-
-    githubConfigUrl: "https://github.com/withluminary/platform"
-    githubConfigSecret: arc-github-secret
-    minRunners: 0
-    maxRunners: 1
-    runnerScaleSetName: "ianpi-platform"
+    runnerScaleSetName: "ianpi-devboxes"
     template:
       spec:
         containers:
