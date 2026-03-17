@@ -6,8 +6,7 @@ metadata:
   name: arc
   namespace: kube-system
 spec:
-  repo: oci://ghcr.io/actions/actions-runner-controller-charts
-  chart: gha-runner-scale-set-controller
+  chart: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller
   targetNamespace: arc-systems
   createNamespace: true
   valuesContent: |-
@@ -30,8 +29,7 @@ metadata:
   name: arc-runner-set-interface
   namespace: kube-system
 spec:
-  repo: oci://ghcr.io/actions/actions-runner-controller-charts
-  chart: gha-runner-scale-set
+  chart: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
   targetNamespace: arc-runners
   createNamespace: true
   valuesContent: |-
@@ -60,8 +58,7 @@ metadata:
   name: arc-runner-set-platform
   namespace: kube-system
 spec:
-  repo: oci://ghcr.io/actions/actions-runner-controller-charts
-  chart: gha-runner-scale-set
+  chart: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
   targetNamespace: arc-runners
   createNamespace: true
   valuesContent: |-
