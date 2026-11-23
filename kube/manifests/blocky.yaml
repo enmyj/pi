@@ -19,7 +19,11 @@ spec:
       hostname: blocky-hostname
       containers:
         - name: blocky
-          image: spx01/blocky:latest
+          image: ghcr.io/0xerr0r/blocky:latest
+          securityContext:
+            capabilities:
+              add:
+                - NET_BIND_SERVICE
           ports:
             - containerPort: 53
               protocol: TCP
@@ -115,38 +119,21 @@ data:
     upstreams:
       groups:
         default:
-          - https://adblock.dns.mullvad.net/dns-query
+          - https://dns.mullvad.net/dns-query
           - https://1.1.1.1/dns-query
           - https://dns.quad9.net/dns-query
-          - 10.43.106.32
     blocking:
       denylists:
         ads:
-          - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
-          - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
-          - http://sysctl.org/cameleon/hosts
-          - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
+          - https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/normal.txt
+        security:
+          - https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/tif.txt
       allowlists:
         ads:
           - |
             mask.icloud.com
-            mask-h2.icloud.com 
+            mask-h2.icloud.com
       clientGroupsBlock:
         default:
           - ads
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: blocky-service-monitor
-  namespace: default
-  labels:
-    release: prometheus # Ensure this matches the label used by your Prometheus deployment
-spec:
-  selector:
-    matchLabels:
-      app: blocky # This should match the label in your Blocky service
-  endpoints:
-    - port: http # The port name defined in the Blocky service
-      path: /metrics
-      interval: 15s
+          - security

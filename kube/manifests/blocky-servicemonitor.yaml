@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: blocky-service-monitor
+  namespace: default
+  labels:
+    release: prometheus # Ensure this matches the label used by your Prometheus deployment
+spec:
+  selector:
+    matchLabels:
+      app: blocky # This should match the label in your Blocky service
+  endpoints:
+    - port: http # The port name defined in the Blocky service
+      path: /metrics
+      interval: 15s
