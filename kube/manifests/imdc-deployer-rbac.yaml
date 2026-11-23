@@ -1,0 +1,58 @@
+---
+# Least-privilege RBAC for GitHub Actions to deploy ianmyjerdotcom over Tailscale.
+# Scoped exclusively to updating the ianmyjerdotcom Deployment in the default namespace.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: imdc-deployer
+  namespace: default
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: imdc-deployer-token
+  namespace: default
+  annotations:
+    kubernetes.io/service-account.name: imdc-deployer
+type: kubernetes.io/service-account-token
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: imdc-deployer
+  namespace: default
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["ianmyjerdotcom"]
+    verbs: ["get", "patch", "update"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments/status"]
+    resourceNames: ["ianmyjerdotcom"]
+    verbs: ["get", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["replicasets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: imdc-deployer
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: imdc-deployer
+    namespace: default
+roleRef:
+  kind: Role
+  name: imdc-deployer
+  apiGroup: rbac.authorization.k8s.io

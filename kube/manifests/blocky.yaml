@@ -106,7 +106,7 @@ metadata:
   namespace: default
 data:
   config.yml: |
-    minTlsServeVersion: 1.1
+    minTlsServeVersion: 1.2
     connectIPVersion: v4
     ports:
       dns: 53
@@ -125,9 +125,9 @@ data:
     blocking:
       denylists:
         ads:
-          - https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/normal.txt
+          - https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/multi.txt
         security:
-          - https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/tif.txt
+          - https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/tif.medium.txt
       allowlists:
         ads:
           - |
