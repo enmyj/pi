@@ -1,13 +1,18 @@
-kind: Deployment
+---
 apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: ianmyjerdotcom
   namespace: default
   labels:
     app: ianmyjerdotcom
-
 spec:
-  replicas: 2
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: ianmyjerdotcom
@@ -18,17 +23,30 @@ spec:
     spec:
       containers:
         - name: ianmyjerdotcom
-          image: enmyj/ianmyjerdotcom:latest
+          image: ghcr.io/enmyj/ianmyjerdotcom:latest
+          imagePullPolicy: Always
           ports:
-            - containerPort: 8000
+            - containerPort: 8080
               protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 20
           resources:
             requests:
-              cpu: "0.25"
-              memory: "256Mi"
+              cpu: "25m"
+              memory: "32Mi"
             limits:
-              cpu: "0.5"
-              memory: "512Mi"
+              cpu: "250m"
+              memory: "128Mi"
 
 ---
 apiVersion: v1
@@ -36,12 +54,11 @@ kind: Service
 metadata:
   name: ianmyjerdotcom
   namespace: default
-
 spec:
   ports:
     - protocol: TCP
       name: http
       port: 80
-      targetPort: 8000
+      targetPort: 8080
   selector:
     app: ianmyjerdotcom

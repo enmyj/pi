@@ -1,0 +1,31 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: nginx-gateway-fabric
+  namespace: kube-system
+spec:
+  chart: oci://ghcr.io/nginx/charts/nginx-gateway-fabric
+  version: 2.9.0
+  targetNamespace: nginx-gateway
+  createNamespace: true
+  serverSide: "false"
+  valuesContent: |-
+    nginxGateway:
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          memory: 256Mi
+    nginx:
+      service:
+        type: LoadBalancer
+        annotations:
+          metallb.io/address-pool: home-pool
+      pod:
+        resources:
+          requests:
+            cpu: 25m
+            memory: 32Mi
+          limits:
+            memory: 128Mi
