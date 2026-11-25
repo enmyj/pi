@@ -115,7 +115,7 @@ spec:
       targetPort: 8123
 
 ---
-# Routes Home Assistant through home-gateway (NGINX Gateway Fabric).
+# Routes Home Assistant on LAN through home-gateway (NGINX Gateway Fabric).
 # Requires `use_x_forwarded_for: true` and `trusted_proxies`
 # (10.42.0.0/16, 10.43.0.0/16, 192.168.0.200, 127.0.0.1, ::1)
 # configured in Home Assistant's HTTP settings (/config/.storage/http).
@@ -128,7 +128,6 @@ spec:
   parentRefs:
     - name: home-gateway
   hostnames:
-    - ha.ianmyjer.com
     - homeassistant.lan
   rules:
     - matches:
@@ -138,3 +137,22 @@ spec:
       backendRefs:
         - name: homeassistant
           port: 8123
+
+---
+# Exposes Home Assistant over Tailscale at https://homeassistant.<tailnet>.ts.net
+# via the Tailscale Kubernetes Operator (kube/charts/tailscale-helm-crd.yaml).
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homeassistant-tailscale
+  namespace: default
+spec:
+  defaultBackend:
+    service:
+      name: homeassistant
+      port:
+        number: 8123
+  ingressClassName: tailscale
+  tls:
+    - hosts:
+        - homeassistant

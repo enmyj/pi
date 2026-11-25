@@ -1,0 +1,44 @@
+---
+# Tailscale Kubernetes Operator
+# Docs: https://tailscale.com/kb/1236/kubernetes-operator
+#
+# Prerequisites in Tailscale Admin Console:
+#   1. Access Controls (ACL): add tagOwners:
+#        "tag:k8s-operator": []
+#        "tag:k8s": ["tag:k8s-operator"]
+#   2. DNS: enable MagicDNS and HTTPS Certificates.
+#   3. Settings -> Trust credentials -> + Credential -> OAuth:
+#      Select Write scopes for Devices -> Core, Keys -> Auth Keys, and
+#      General -> Services, and tag the credential with `tag:k8s-operator`.
+#
+# Then create the OAuth secret in the cluster (never commit credentials to git):
+#   kubectl create secret generic operator-oauth \
+#     -n tailscale \
+#     --from-literal=client_id='<OAUTH_CLIENT_ID>' \
+#     --from-literal=client_secret='<OAUTH_CLIENT_SECRET>'
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tailscale
+
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: tailscale-operator
+  namespace: kube-system
+spec:
+  chart: tailscale-operator
+  repo: https://pkgs.tailscale.com/helmcharts
+  version: 1.104.7
+  targetNamespace: tailscale
+  createNamespace: true
+  valuesContent: |-
+    operatorConfig:
+      hostname: pi-k3s-operator
+      resources:
+        requests:
+          cpu: 25m
+          memory: 32Mi
+        limits:
+          memory: 128Mi
