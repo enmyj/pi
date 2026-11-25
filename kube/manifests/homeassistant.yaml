@@ -1,0 +1,140 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: homeassistant-config
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homeassistant
+  namespace: default
+  labels:
+    app: homeassistant
+spec:
+  replicas: 1
+  # Required because the pod uses hostNetwork (port 8123) and a ReadWriteOnce PVC.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: homeassistant
+  template:
+    metadata:
+      labels:
+        app: homeassistant
+    spec:
+      # hostNetwork enables LAN L2 auto-discovery (mDNS/Bonjour/SSDP/HomeKit/Apple TV/Samsung TV).
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: homeassistant
+          image: ghcr.io/home-assistant/home-assistant:stable
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8123
+              protocol: TCP
+          env:
+            - name: TZ
+              value: "America/Los_Angeles"
+          startupProbe:
+            httpGet:
+              path: /manifest.json
+              port: 8123
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 36
+          readinessProbe:
+            httpGet:
+              path: /manifest.json
+              port: 8123
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /manifest.json
+              port: 8123
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "2"
+              memory: "1Gi"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            # Uncomment below (and volumes.dbus) to enable host Bluetooth/BLE
+            # (e.g., for the Combustion Inc. thermometer via the Pi's Bluetooth radio):
+            # - name: dbus
+            #   mountPath: /run/dbus
+            #   readOnly: true
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: homeassistant-config
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+            type: File
+        # - name: dbus
+        #   hostPath:
+        #     path: /run/dbus
+        #     type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: homeassistant
+  namespace: default
+  labels:
+    app: homeassistant
+spec:
+  selector:
+    app: homeassistant
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8123
+      targetPort: 8123
+
+---
+# Routes Home Assistant through home-gateway (NGINX Gateway Fabric).
+# Requires `use_x_forwarded_for: true` and `trusted_proxies`
+# (10.42.0.0/16, 10.43.0.0/16, 192.168.0.200, 127.0.0.1, ::1)
+# configured in Home Assistant's HTTP settings (/config/.storage/http).
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: homeassistant
+  namespace: default
+spec:
+  parentRefs:
+    - name: home-gateway
+  hostnames:
+    - ha.ianmyjer.com
+    - homeassistant.lan
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: homeassistant
+          port: 8123
